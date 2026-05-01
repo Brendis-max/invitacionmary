@@ -3,9 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¡Invitación Especial para Mary!</title>
+    <title>Una invitación especial 🎉</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        * {
+        :root {
+            --rose: #ff4e6a;
+            --rose-light: #ff8fa3;
+            --gold: #f5c842;
+            --purple: #7c3aed;
+            --purple-soft: #c4b5fd;
+            --cream: #fff9f5;
+            --dark: #1a0a2e;
+        }
+
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -13,8 +24,8 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark);
+            font-family: 'DM Sans', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,88 +33,187 @@
             position: relative;
         }
 
-        /* Globos decorativos de fondo */
-        .balloon-decoration {
+        /* ── Fondo animado ── */
+        .bg-layer {
             position: fixed;
-            width: 60px;
-            height: 80px;
-            border-radius: 50% 50% 50% 50%;
-            animation: floatBalloon 6s ease-in-out infinite;
-            opacity: 0.7;
-            z-index: 0;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 20%, rgba(124,58,237,.35) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 50% at 80% 80%, rgba(255,78,106,.30) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 50% 50%, rgba(245,200,66,.10) 0%, transparent 70%);
+            animation: bgShift 8s ease-in-out infinite alternate;
         }
 
-        .balloon-decoration::after {
+        @keyframes bgShift {
+            from { filter: hue-rotate(0deg); }
+            to   { filter: hue-rotate(20deg); }
+        }
+
+        /* ── Estrellas / partículas de fondo ── */
+        .stars {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--d) ease-in-out infinite var(--delay);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50%       { opacity: 0.8; transform: scale(1.4); }
+        }
+
+        /* ── Globos flotantes (fondo) ── */
+        .balloon-wrap {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bal {
+            position: absolute;
+            border-radius: 50% 50% 46% 54% / 60% 60% 40% 40%;
+            animation: floatUp var(--dur) ease-in-out infinite var(--del);
+            opacity: .55;
+        }
+
+        .bal::after {
             content: '';
             position: absolute;
-            bottom: -20px;
+            bottom: -22px;
             left: 50%;
             transform: translateX(-50%);
-            width: 2px;
-            height: 30px;
-            background: rgba(255,255,255,0.5);
+            width: 1.5px;
+            height: 28px;
+            background: rgba(255,255,255,.4);
         }
 
-        .balloon-decoration:nth-child(1) { left: 5%; top: 10%; background: #ff6b6b; animation-delay: 0s; }
-        .balloon-decoration:nth-child(2) { left: 15%; top: 60%; background: #4ecdc4; animation-delay: 1s; }
-        .balloon-decoration:nth-child(3) { left: 85%; top: 20%; background: #ffe66d; animation-delay: 2s; }
-        .balloon-decoration:nth-child(4) { left: 90%; top: 70%; background: #ff8a5b; animation-delay: 0.5s; }
-        .balloon-decoration:nth-child(5) { left: 10%; top: 85%; background: #a8e6cf; animation-delay: 1.5s; }
-        .balloon-decoration:nth-child(6) { left: 80%; top: 85%; background: #dcd6f7; animation-delay: 2.5s; }
-
-        @keyframes floatBalloon {
-            0%, 100% { transform: translateY(0) rotate(-5deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
+        @keyframes floatUp {
+            0%, 100% { transform: translateY(0) rotate(-4deg); }
+            50%       { transform: translateY(-28px) rotate(4deg); }
         }
 
+        /* ── Card principal ── */
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 30px;
-            padding: 50px 40px;
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
             position: relative;
             z-index: 10;
-            backdrop-filter: blur(10px);
+            width: min(480px, 92vw);
+            background: rgba(255,249,245,.97);
+            border-radius: 36px;
+            padding: 52px 44px 48px;
+            text-align: center;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,.15),
+                0 32px 80px rgba(0,0,0,.55),
+                0 8px 20px rgba(124,58,237,.25);
+            backdrop-filter: blur(12px);
+            animation: cardAppear .9s cubic-bezier(.22,1,.36,1) both;
         }
 
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(50px) scale(.95); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Cinta decorativa superior */
         .card::before {
-            content: '🎉';
+            content: '';
             position: absolute;
-            top: -30px;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            border-radius: 36px 36px 0 0;
+            background: linear-gradient(90deg, var(--purple), var(--rose), var(--gold), var(--rose), var(--purple));
+            background-size: 200% 100%;
+            animation: ribbonSlide 4s linear infinite;
+        }
+
+        @keyframes ribbonSlide {
+            from { background-position: 0% 0%; }
+            to   { background-position: 200% 0%; }
+        }
+
+        /* Emoji flotante arriba */
+        .top-icon {
+            position: absolute;
+            top: -36px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 60px;
-            animation: bounce 1s ease-in-out infinite;
+            font-size: 58px;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,.4));
+            animation: iconBounce 2s ease-in-out infinite;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
+        @keyframes iconBounce {
+            0%,100% { transform: translateX(-50%) translateY(0); }
+            50%      { transform: translateX(-50%) translateY(-10px); }
         }
 
-        .photo-container {
-            width: 180px;
-            height: 180px;
-            margin: 20px auto 30px;
+        /* ── Encabezado ── */
+        .eyebrow {
+            font-family: 'DM Sans', sans-serif;
+            font-size: .72em;
+            font-weight: 500;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--purple);
+            margin-top: 10px;
+            margin-bottom: 6px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.05em;
+            color: var(--dark);
+            line-height: 1.15;
+            margin-bottom: 4px;
+        }
+
+        h1 em {
+            font-style: italic;
+            background: linear-gradient(135deg, var(--rose), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── Foto ── */
+        .photo-ring {
+            width: 178px;
+            height: 178px;
+            margin: 28px auto 24px;
             border-radius: 50%;
-            border: 5px solid transparent;
-            background: linear-gradient(white, white) padding-box,
-                        linear-gradient(135deg, #667eea, #764ba2, #f093fb, #ff6b6b) border-box;
-            padding: 5px;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            padding: 4px;
+            background: conic-gradient(var(--rose), var(--gold), var(--purple), var(--rose-light), var(--rose));
+            animation: ringRotate 6s linear infinite;
+            box-shadow: 0 12px 40px rgba(124,58,237,.35);
+        }
+
+        @keyframes ringRotate {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        .photo-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
             overflow: hidden;
-            animation: glow 3s ease-in-out infinite;
+            background: var(--cream);
+            border: 3px solid white;
+            animation: ringRotate 6s linear infinite reverse; /* contra-rota para estabilizar la foto */
         }
 
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); }
-            50% { box-shadow: 0 10px 40px rgba(240, 147, 251, 0.6); }
-        }
-
-        .photo-container img {
+        .photo-inner img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -113,313 +223,348 @@
         .photo-placeholder {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            color: #666;
+            font-size: 13px;
+            color: #999;
+            padding: 14px;
             text-align: center;
-            padding: 10px;
         }
 
-        h1 {
-            color: #333;
-            font-size: 2.2em;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        /* ── Nombre ── */
+        .name {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--rose) 20%, var(--purple) 80%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin: 4px 0 16px;
+            animation: namePulse 3s ease-in-out infinite;
         }
 
-        .name {
-            font-size: 2.8em;
-            color: #ff6b6b;
-            font-weight: bold;
-            margin: 10px 0;
-            text-shadow: 2px 2px 4px rgba(255, 107, 107, 0.3);
-            animation: pulse 2s ease-in-out infinite;
+        @keyframes namePulse {
+            0%,100% { letter-spacing: .02em; }
+            50%      { letter-spacing: .06em; }
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        /* ── Divisor ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0 auto 22px;
+            width: 80%;
+            color: var(--rose-light);
         }
 
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--rose-light));
+        }
+
+        .divider::after { background: linear-gradient(to left, transparent, var(--rose-light)); }
+
+        /* ── Mensaje ── */
         .message {
-            font-size: 1.3em;
-            color: #555;
-            margin: 25px 0;
-            line-height: 1.6;
+            font-size: 1.08em;
+            color: #4a3560;
+            line-height: 1.75;
+            margin-bottom: 8px;
         }
 
-        .emoji-decoration {
-            font-size: 2em;
-            margin: 15px 0;
+        .emoji-row {
+            font-size: 1.7em;
+            margin: 16px 0 28px;
+            letter-spacing: .18em;
+            animation: emojiWave 2.5s ease-in-out infinite;
         }
 
-        .buttons-container {
+        @keyframes emojiWave {
+            0%,100% { transform: rotate(-2deg); }
+            50%      { transform: rotate(2deg); }
+        }
+
+        /* ── Botones ── */
+        .buttons-wrapper {
+            position: relative;
+            min-height: 80px;
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin-top: 35px;
-            position: relative;
+            align-items: center;
+            gap: 28px;
         }
 
         .btn {
-            padding: 18px 50px;
-            font-size: 1.3em;
-            font-weight: bold;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: 1em;
+            letter-spacing: .1em;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            padding: 16px 44px;
+            transition: transform .25s, box-shadow .25s;
         }
 
         .btn-yes {
-            background: linear-gradient(135deg, #56ab2f, #a8e063);
+            background: linear-gradient(135deg, #22c55e, #16a34a);
             color: white;
-            box-shadow: 0 8px 25px rgba(86, 171, 47, 0.4);
+            box-shadow: 0 8px 28px rgba(34,197,94,.45);
         }
 
         .btn-yes:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(86, 171, 47, 0.5);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 16px 40px rgba(34,197,94,.55);
         }
+
+        .btn-yes:active { transform: scale(.97); }
 
         .btn-no {
-            background: linear-gradient(135deg, #eb3349, #f45c43);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
-            box-shadow: 0 8px 25px rgba(235, 51, 73, 0.4);
+            box-shadow: 0 8px 28px rgba(239,68,68,.4);
             position: absolute;
+            transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
+            white-space: nowrap;
         }
 
-        /* Mensaje de agradecimiento */
+        /* ── Thank you ── */
         .thank-you {
             display: none;
-            animation: fadeInUp 0.8s ease-out;
+            animation: fadeUp .8s cubic-bezier(.22,1,.36,1) both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .thank-you h2 {
-            font-size: 2.5em;
-            background: linear-gradient(135deg, #56ab2f, #a8e063);
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .thank-you p {
-            font-size: 1.4em;
-            color: #666;
+            font-size: 1.2em;
+            color: #4a3560;
         }
 
         .heart {
-            color: #ff6b6b;
             font-size: 3em;
+            display: inline-block;
             animation: heartbeat 1s ease-in-out infinite;
+            margin-top: 12px;
         }
 
         @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            0%,100% { transform: scale(1); }
+            50%      { transform: scale(1.25); }
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Confeti y globos de celebración */
+        /* ── Confetti & celebration balloons ── */
         .confetti {
             position: fixed;
-            width: 15px;
-            height: 15px;
+            width: 12px;
+            height: 12px;
             top: -20px;
-            animation: fall linear forwards;
+            animation: fallConf linear forwards;
             z-index: 1000;
+            pointer-events: none;
         }
 
-        .celebration-balloon {
+        @keyframes fallConf {
+            to { transform: translateY(105vh) rotate(800deg); opacity: 0; }
+        }
+
+        .cel-balloon {
             position: fixed;
-            bottom: -150px;
-            width: 50px;
-            height: 65px;
-            border-radius: 50%;
-            animation: riseBalloon 4s ease-out forwards;
+            bottom: -140px;
+            border-radius: 50% 50% 46% 54% / 60% 60% 40% 40%;
+            animation: riseUp ease-out forwards;
             z-index: 1000;
+            pointer-events: none;
         }
 
-        .celebration-balloon::after {
+        .cel-balloon::after {
             content: '';
             position: absolute;
-            bottom: -40px;
+            bottom: -44px;
             left: 50%;
             transform: translateX(-50%);
-            width: 2px;
+            width: 1.5px;
             height: 50px;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,.25);
         }
 
-        @keyframes fall {
-            to {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
+        @keyframes riseUp {
+            to { bottom: 115vh; opacity: 0; }
         }
 
-        @keyframes riseBalloon {
-            to {
-                bottom: 110vh;
-                opacity: 0;
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 500px) {
-            .card {
-                padding: 40px 25px;
-            }
-            h1 {
-                font-size: 1.6em;
-            }
-            .name {
-                font-size: 2.2em;
-            }
-            .buttons-container {
-                flex-direction: column;
-                gap: 20px;
-                align-items: center;
-            }
-            .btn {
-                padding: 15px 40px;
-                font-size: 1.1em;
-            }
-            .btn-no {
-                position: relative;
-            }
+        @media (max-width: 440px) {
+            .card { padding: 44px 22px 38px; }
+            h1 { font-size: 1.6em; }
+            .name { font-size: 2.4em; }
+            .btn-no { position: relative !important; transform: none !important; }
+            .buttons-wrapper { flex-direction: column; min-height: auto; gap: 14px; }
         }
     </style>
 </head>
 <body>
-    <!-- Globos decorativos de fondo -->
-    <div class="balloon-decoration"></div>
-    <div class="balloon-decoration"></div>
-    <div class="balloon-decoration"></div>
-    <div class="balloon-decoration"></div>
-    <div class="balloon-decoration"></div>
-    <div class="balloon-decoration"></div>
 
-    <div class="card">
-        <h1>¡Estás Invitada!</h1>
-        
-        <div class="photo-container">
-            <!-- Reemplaza el src con la ruta de tu imagen -->
-            <img src="tavoymary.png" alt="Foto de nosotros" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="photo-placeholder" style="display: none;">📸 Coloca aquí tu foto</div>
-        </div>
+<!-- Fondo animado -->
+<div class="bg-layer"></div>
 
-        <p class="name">Mary</p>
-        
-        <div class="emoji-decoration">🎈🎊🎁🎂🎈</div>
-        
-        <p class="message">
-            ¡Por favor asiste a mi fiesta!<br>
-            Tu presencia lo haría todo más especial ✨
-        </p>
+<!-- Estrellas -->
+<div class="stars" id="stars"></div>
 
-        <div class="buttons-container" id="buttonsContainer">
-            <button class="btn btn-yes" onclick="sayYes()">¡Sí! 🎉</button>
-            <button class="btn btn-no" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No 😢</button>
-        </div>
+<!-- Globos de fondo -->
+<div class="balloon-wrap" id="balloonWrap"></div>
 
-        <div class="thank-you" id="thankYou">
-            <h2>¡GRACIAS!</h2>
-            <p>Hermanita, ¡eres la mejor! 💕</p>
-            <div class="heart">❤️</div>
+<!-- Card -->
+<div class="card">
+    <div class="top-icon">🎉</div>
+
+    <p class="eyebrow">Una invitación muy especial</p>
+    <h1>¡Estás <em>Invitada</em>!</h1>
+
+    <div class="photo-ring">
+        <div class="photo-inner">
+            <img src="tavoymary.png" alt="Tavo y Mary"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="photo-placeholder" style="display:none;">📸 Tavo &amp; Mary</div>
         </div>
     </div>
 
-    <script>
-        const noBtn = document.getElementById('noBtn');
-        const card = document.querySelector('.card');
-        
-        function moveButton() {
-            const cardRect = card.getBoundingClientRect();
-            const btnRect = noBtn.getBoundingClientRect();
-            
-            // Calcular límites dentro de la tarjeta
-            const maxX = cardRect.width - btnRect.width - 40;
-            const maxY = 150;
-            
-            // Generar posición aleatoria
-            const randomX = Math.random() * maxX - maxX/2;
-            const randomY = Math.random() * maxY - maxY/2;
-            
-            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
-        }
+    <p class="name">Mary</p>
 
-        function sayYes() {
-            // Ocultar botones
-            document.getElementById('buttonsContainer').style.display = 'none';
-            
-            // Mostrar mensaje de agradecimiento
-            document.getElementById('thankYou').style.display = 'block';
-            
-            // Lanzar celebración
-            createCelebration();
-        }
+    <div class="divider">🌸</div>
 
-        function createCelebration() {
-            const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#ff8a5b', '#a8e6cf', '#dcd6f7', '#667eea', '#f093fb'];
-            
-            // Crear globos
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    createBalloon(colors[Math.floor(Math.random() * colors.length)]);
-                }, i * 150);
-            }
-            
-            // Crear confeti
-            for (let i = 0; i < 100; i++) {
-                setTimeout(() => {
-                    createConfetti(colors[Math.floor(Math.random() * colors.length)]);
-                }, i * 50);
-            }
-        }
+    <p class="message">
+        Hermanita, tu presencia lo hace<br>
+        todo más especial y brillante ✨<br>
+        <strong>¡Por favor ven a mi fiesta!</strong>
+    </p>
 
-        function createBalloon(color) {
-            const balloon = document.createElement('div');
-            balloon.className = 'celebration-balloon';
-            balloon.style.left = Math.random() * 100 + 'vw';
-            balloon.style.background = color;
-            balloon.style.animationDuration = (3 + Math.random() * 2) + 's';
-            document.body.appendChild(balloon);
-            
-            setTimeout(() => balloon.remove(), 5000);
-        }
+    <div class="emoji-row">🎈🎊🎁🎂🎀</div>
 
-        function createConfetti(color) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = Math.random() * 100 + 'vw';
-            confetti.style.background = color;
-            confetti.style.animationDuration = (2 + Math.random() * 3) + 's';
-            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-            document.body.appendChild(confetti);
-            
-            setTimeout(() => confetti.remove(), 5000);
+    <div class="buttons-wrapper" id="buttonsContainer">
+        <button class="btn btn-yes" onclick="sayYes()">¡Sí voy! 🎉</button>
+        <button class="btn btn-no" id="noBtn"
+                onmouseover="moveButton()"
+                onclick="moveButton()">No 😢</button>
+    </div>
+
+    <div class="thank-you" id="thankYou">
+        <h2>¡Sabía que dirías sí!</h2>
+        <p>Hermanita, ¡eres la mejor del mundo! 💕</p>
+        <div class="heart">❤️</div>
+    </div>
+</div>
+
+<script>
+    /* ── Estrellas ── */
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.cssText = `
+            left:${Math.random()*100}vw;
+            top:${Math.random()*100}vh;
+            --d:${2+Math.random()*4}s;
+            --delay:-${Math.random()*4}s;
+        `;
+        starsEl.appendChild(s);
+    }
+
+    /* ── Globos de fondo ── */
+    const bgColors = ['#ff4e6a','#7c3aed','#f5c842','#4ecdc4','#ff8fa3','#c4b5fd','#22c55e'];
+    const bwrap = document.getElementById('balloonWrap');
+    for (let i = 0; i < 8; i++) {
+        const b = document.createElement('div');
+        b.className = 'bal';
+        const size = 45 + Math.random() * 30;
+        b.style.cssText = `
+            width:${size}px; height:${size*1.3}px;
+            left:${Math.random()*95}%;
+            top:${Math.random()*90}%;
+            background:${bgColors[i % bgColors.length]};
+            --dur:${5+Math.random()*4}s;
+            --del:-${Math.random()*5}s;
+        `;
+        bwrap.appendChild(b);
+    }
+
+    /* ── Botón No (huye del cursor) ── */
+    const noBtn = document.getElementById('noBtn');
+    const card  = document.querySelector('.card');
+
+    function moveButton() {
+        const cr = card.getBoundingClientRect();
+        const nr = noBtn.getBoundingClientRect();
+        const rangeX = cr.width  - nr.width  - 24;
+        const rangeY = 120;
+        const rx = (Math.random() * rangeX - rangeX / 2);
+        const ry = (Math.random() * rangeY - rangeY / 2);
+        noBtn.style.transform = `translate(${rx}px, ${ry}px)`;
+    }
+
+    /* ── Botón Sí ── */
+    function sayYes() {
+        document.getElementById('buttonsContainer').style.display = 'none';
+        document.getElementById('thankYou').style.display = 'block';
+        launchCelebration();
+    }
+
+    /* ── Celebración ── */
+    function launchCelebration() {
+        const colors = ['#ff4e6a','#7c3aed','#f5c842','#4ecdc4','#ff8fa3','#22c55e','#fb923c','#c4b5fd'];
+        for (let i = 0; i < 22; i++) {
+            setTimeout(() => spawnBalloon(colors[i % colors.length]), i * 130);
         }
-    </script>
+        for (let i = 0; i < 120; i++) {
+            setTimeout(() => spawnConfetti(colors[i % colors.length]), i * 40);
+        }
+    }
+
+    function spawnBalloon(color) {
+        const el = document.createElement('div');
+        el.className = 'cel-balloon';
+        const size = 40 + Math.random() * 30;
+        const dur  = 3 + Math.random() * 2.5;
+        el.style.cssText = `
+            left:${Math.random()*100}vw;
+            width:${size}px; height:${size*1.3}px;
+            background:${color};
+            animation-duration:${dur}s;
+        `;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), (dur + 0.5) * 1000);
+    }
+
+    function spawnConfetti(color) {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        const dur = 2 + Math.random() * 3;
+        el.style.cssText = `
+            left:${Math.random()*100}vw;
+            background:${color};
+            animation-duration:${dur}s;
+            border-radius:${Math.random()>.5?'50%':'3px'};
+        `;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), (dur + .5) * 1000);
+    }
+</script>
 </body>
 </html>
